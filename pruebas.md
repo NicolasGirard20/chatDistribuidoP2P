@@ -37,6 +37,10 @@ Iniciando Servidor de Descubrimiento...
 - ❌ Puerto 9999 ya está en uso → Cambiar puerto en configuración
 - ❌ Error de permisos → Ejecutar con permisos adecuados
 
+**Resultado obtenido**:
+
+![alt text](/Imagenes/image1.1.png)
+
 ---
 
 ### 🧪 Prueba 1.2: Conexión de un Solo Peer
@@ -61,6 +65,13 @@ Iniciando Servidor de Descubrimiento...
 - ✅ Heartbeats se envían cada 10 segundos
 - ✅ No hay errores en consola
 
+**Resultado obtenido**:
+
+![alt text](/Imagenes/image1.2.1.jpg)
+
+![alt text](/Imagenes/image1.2.2.jpg)
+![alt text](/Imagenes/image1.2.3.jpg)
+
 ---
 
 ### 🧪 Prueba 1.3: Conexión de Múltiples Peers
@@ -83,6 +94,11 @@ Iniciando Servidor de Descubrimiento...
 - ✅ Todos los peers reciben la lista completa
 - ✅ Cada peer tiene un ID único
 - ✅ La lista se actualiza automáticamente cuando alguien se une
+
+**Resultado obtenido**:
+
+![alt text](/Imagenes/image1.3.1.jpg)
+![alt text](/Imagenes/image1.3.2.jpg)
 
 ---
 
@@ -107,6 +123,11 @@ Iniciando Servidor de Descubrimiento...
 - ✅ Listas de peers se actualizan automáticamente
 - ✅ No quedan conexiones zombies
 
+**Resultado obtenido**:
+
+![alt text](/Imagenes/image1.4.1.jpg)
+![alt text](/Imagenes/image1.4.2.jpg)
+
 ---
 
 ## 2. Pruebas de Comunicación P2P
@@ -116,20 +137,23 @@ Iniciando Servidor de Descubrimiento...
 **Objetivo**: Verificar que un peer puede enviar mensajes a otros.
 
 **Pasos**:
-1. Conectar Alice y Bob
-2. Alice escribe "Hola Bob!" y presiona Enter
+1. Conectar Alice y Charlie
+2. Alice escribe "Hola Charlie!" y presiona Enter
 3. Observar ambas pantallas
 
 **Resultado Esperado**:
-- En Alice: "**Alice (Tú)**: Hola Bob!"
-- En Bob: "**Alice**: Hola Bob!" (después de 1-2 segundos)
-- El mensaje aparece en la UI de Bob automáticamente
+- En Alice: "**Alice (Tú)**: Hola Charlie!"
+- En Bob: "**Alice**: Hola Charlie!" (después de 1-2 segundos)
+- El mensaje aparece en la UI de Charlie automáticamente
 
 **Criterios de Éxito**:
 - ✅ Mensaje enviado vía conexión P2P directa
 - ✅ Mensaje aparece en el destinatario
 - ✅ No pasa por el servidor de descubrimiento
 - ✅ Formato correcto del mensaje
+
+**Resultado obtenido**:
+![alt text](/Imagenes/image2.1.jpg)
 
 ---
 
@@ -153,59 +177,15 @@ Iniciando Servidor de Descubrimiento...
 - ✅ No hay duplicados
 - ✅ Orden correcto de mensajes
 
----
 
-### 🧪 Prueba 2.3: Conversación Bidireccional
+**Resultado obtenido**:
 
-**Objetivo**: Verificar el flujo de conversación natural.
-
-**Pasos**:
-1. Conectar Alice y Bob
-2. Secuencia de mensajes:
-   - Alice: "Hola Bob!"
-   - Bob: "Hola Alice, ¿cómo estás?"
-   - Alice: "Muy bien, gracias"
-   - Bob: "¡Genial!"
-
-**Resultado Esperado**:
-- Ambos peers ven toda la conversación en orden
-- Los mensajes se intercalan correctamente
-- No hay pérdida de mensajes
-- Los timestamps (si los hay) son correctos
-
-**Criterios de Éxito**:
-- ✅ 4/4 mensajes entregados
-- ✅ Orden cronológico correcto
-- ✅ Identificación correcta de remitente
-- ✅ No hay race conditions
+![alt text](/Imagenes/image2.2.1.jpg)
+![alt text](/Imagenes/image2.2.2.jpg)
+![alt text](/Imagenes/image2.2.3.jpg)
 
 ---
 
-### 🧪 Prueba 2.4: Mensajes Especiales
-
-**Objetivo**: Verificar que mensajes con caracteres especiales se manejan correctamente.
-
-**Pasos**:
-1. Conectar Alice y Bob
-2. Enviar mensajes con:
-   - Emojis: "Hola 👋 😊 🎉"
-   - Acentos: "Mónica, José, François"
-   - Símbolos: "Precio: $100 • 50% descuento"
-   - Multilínea: Presionar Enter múltiples veces
-   - JSON-like: `{"test": "value"}`
-
-**Resultado Esperado**:
-- Todos los caracteres se muestran correctamente
-- No hay corrupción de datos
-- La codificación UTF-8 funciona bien
-
-**Criterios de Éxito**:
-- ✅ Emojis se muestran correctamente
-- ✅ Acentos preservados
-- ✅ Símbolos especiales no rompen el protocolo
-- ✅ No hay errores de encoding
-
----
 
 ## 3. Pruebas de Tolerancia a Fallos
 
@@ -232,6 +212,12 @@ Iniciando Servidor de Descubrimiento...
 - ✅ No hay crash de peers
 - ✅ UI refleja el cambio de estado
 
+**Resultado obtenido**:
+
+![alt text](/Imagenes/image3.1.1.jpg)
+![alt text](/Imagenes/image3.1.2.jpg)
+![alt text](/Imagenes/image3.1.3.jpg)
+
 ---
 
 ### 🧪 Prueba 3.2: Reconexión Automática al Servidor
@@ -257,95 +243,17 @@ Iniciando Servidor de Descubrimiento...
 - ✅ Comunicación sigue funcionando
 - ✅ No se pierden mensajes durante la transición
 
----
 
-### 🧪 Prueba 3.3: Peer Cae Abruptamente
+**Resultado obtenido**:
 
-**Objetivo**: Verificar la detección y limpieza de peers caídos.
-
-**Pasos**:
-1. Conectar Alice, Bob y Charlie
-2. Cerrar la ventana de Bob **sin usar el botón de desconectar** (simula crash)
-3. Esperar 30-40 segundos
-4. Observar Alice y Charlie
-
-**Resultado Esperado**:
-
-**Con Servidor UP**:
-- Después de ~30 segundos (HEARTBEAT_TIMEOUT)
-- Servidor detecta que Bob no envía heartbeats
-- Servidor notifica a Alice y Charlie
-- Bob desaparece de sus listas
-
-**Con Servidor DOWN**:
-- En el próximo ciclo de gossip (5-10 segundos)
-- Alice o Charlie intentan sincronizar con Bob
-- Falla la conexión → Bob es marcado como caído
-- Bob es eliminado localmente
-
-**Criterios de Éxito**:
-- ✅ Detección de peer caído
-- ✅ Notificación a otros peers
-- ✅ Limpieza de listas
-- ✅ No afecta comunicación entre Alice y Charlie
-
----
-
-### 🧪 Prueba 3.4: Red Lenta / Timeout
-
-**Objetivo**: Verificar comportamiento con latencia de red.
-
-**Pasos**:
-1. Conectar Alice y Bob
-2. **Simular latencia** (requiere herramientas como `tc` en Linux):
-   ```bash
-   sudo tc qdisc add dev lo root netem delay 2000ms
-   ```
-3. Intentar enviar mensajes
-4. Observar comportamiento
-
-**Resultado Esperado**:
-- Mensajes pueden tardar más en llegar (2+ segundos)
-- Sistema no marca peers como caídos prematuramente
-- Timeouts configurados (5s) manejan la latencia
-- Eventualmente los mensajes llegan
-
-**Criterios de Éxito**:
-- ✅ Sistema tolera latencia razonable (< 5s)
-- ✅ No hay falsos positivos de "peer caído"
-- ✅ Mensajes eventualmente se entregan
-- ✅ No hay crashes por timeouts
+![alt text](/Imagenes/image3.2.1.jpg)
+![alt text](/Imagenes/image3.2.2.jpg)
 
 ---
 
 ## 4. Pruebas del Protocolo Gossip
 
-### 🧪 Prueba 4.1: Sincronización Básica
-
-**Objetivo**: Verificar que el gossip propaga información correctamente.
-
-**Pasos**:
-1. Detener el servidor
-2. Conectar Alice y Bob (modo P2P)
-3. Alice envía un mensaje a Bob
-4. Presionar "🔄 Actualizar" en ambos peers
-5. Verificar las listas
-
-**Resultado Esperado**:
-- Ambos peers mantienen sus listas sincronizadas
-- El botón "Actualizar" fuerza un ciclo de gossip
-- Logs: `[Gossip] Sincronizando con Bob...`
-- Las listas son consistentes
-
-**Criterios de Éxito**:
-- ✅ Sincronización manual funciona
-- ✅ Listas se mantienen actualizadas
-- ✅ No hay errores de comunicación
-- ✅ Protocolo MSG_SYNC funciona
-
----
-
-### 🧪 Prueba 4.2: Gossip Automático
+### 🧪 Prueba 4.1: Sincronización y Gossip Automático
 
 **Objetivo**: Verificar la sincronización automática cada 5 segundos.
 
@@ -367,52 +275,42 @@ Iniciando Servidor de Descubrimiento...
 - ✅ Selección aleatoria de peers
 - ✅ Sincronización exitosa
 
+**Resultado obtenido**:
+
+![alt text](/Imagenes/image4.1.1.jpg)
+![alt text](/Imagenes/image4.1.2.jpg)
+
 ---
 
-### 🧪 Prueba 4.3: Propagación de Información
+### 🧪 Prueba 4.2: Conexión sin server
 
-**Objetivo**: Verificar que la información se propaga entre peers sin servidor.
+**Objetivo**: Verificar que un nuevo peer no se puede conectar sin el server encendido.
 
 **Pasos**:
 1. Detener el servidor
 2. Conectar Alice, Bob y Charlie (todos se conocen)
 3. **Nuevo peer Dave se conecta directamente a Alice** (simulación manual):
-   - En modo P2P, Dave solo conoce a Alice inicialmente
-4. Esperar ciclos de gossip (15-30 segundos)
-5. Verificar que Bob y Charlie eventualmente conocen a Dave
+4. Se pide el estado activo del server
 
 **Resultado Esperado**:
 ```
-t=0s:  Dave conoce: [Dave, Alice]
-       Alice conoce: [Alice, Bob, Charlie, Dave]
-       Bob conoce: [Alice, Bob, Charlie]
-       Charlie conoce: [Alice, Bob, Charlie]
-
-t=5s:  Alice hace gossip con Bob
-       Bob aprende sobre Dave
-
-t=10s: Bob hace gossip con Charlie
-       Charlie aprende sobre Dave
-
-t=15s: Todos conocen a Dave ✅
+En la interfaz gráfica se pregunta si el server está corriendo
 ```
 
-**Criterios de Éxito**:
-- ✅ Información se propaga gradualmente
-- ✅ Convergencia eventual alcanzada
-- ✅ Todos los peers tienen la misma lista
-- ✅ No hay loops infinitos
+**Resultado obtenido**:
+
+![alt text](/Imagenes/image4.2.1.jpg)
+![alt text](/Imagenes/image4.2.2.jpg)
 
 ---
 
-### 🧪 Prueba 4.4: Detección Distribuida de Fallo
+### 🧪 Prueba 4.3: Detección Distribuida de Fallo
 
 **Objetivo**: Verificar que peers caídos son detectados sin servidor.
 
 **Pasos**:
 1. Detener el servidor
-2. Conectar Alice, Bob, Charlie y Dave
-3. Cerrar la ventana de Dave (crash)
+3. Desconecta a Bob 
 4. Esperar 10-15 segundos
 5. Observar las listas de Alice, Bob y Charlie
 
@@ -427,5 +325,8 @@ t=15s: Todos conocen a Dave ✅
 - ✅ Propagación de información de fallo
 - ✅ Convergencia: todos eliminan a Dave
 - ✅ Sistema estabiliza sin el peer caído
+**Resultado obtenido**:
+
+![alt text](/Imagenes/image4.3.jpg)
 
 ---
