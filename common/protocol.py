@@ -1,5 +1,4 @@
-
-"""Definición del Protocolo
+"""Definición del Protocolo - CON SOPORTE DE RELAY
 
 Este módulo define los tipos de mensaje y utilidades para crear/parsear
 mensajes JSON terminados en newline usados por el sistema P2P.
@@ -7,21 +6,27 @@ mensajes JSON terminados en newline usados por el sistema P2P.
 
 import json
 
-# --- Tipos de Mensajes ---
-MSG_REGISTER = "REGISTER"        # Peer -> Servidor: Registrarse
-MSG_REGISTER_ACK = "REGISTER_ACK"  # Servidor -> Peer: OK, aquí está tu ID y la lista
-MSG_UNREGISTER = "UNREGISTER"      # Peer -> Servidor: Me voy
-MSG_GET_PEERS = "GET_PEERS"        # (Opcional) Peer -> Servidor: Dame la lista
-MSG_PEER_LIST_UPDATE = "PEER_LIST_UPDATE" # Servidor -> Peer: Alguien se unió/fue
+# --- Tipos de Mensajes Básicos ---
+MSG_REGISTER = "REGISTER"
+MSG_REGISTER_ACK = "REGISTER_ACK"
+MSG_UNREGISTER = "UNREGISTER"
+MSG_GET_PEERS = "GET_PEERS"
+MSG_PEER_LIST_UPDATE = "PEER_LIST_UPDATE"
+MSG_HEARTBEAT = "HEARTBEAT"
+MSG_ACK = "ACK"
 
-MSG_CHAT = "CHAT"                # Peer -> Peer: Mensaje de chat
-MSG_HEARTBEAT = "HEARTBEAT"      # Peer -> Servidor: Sigo vivo
-MSG_ACK = "ACK"                  # (Opcional) Peer -> Peer: Recibí tu mensaje
+# --- Mensajes P2P ---
+MSG_CHAT = "CHAT"
 
-# --- Mensajes para Tolerancia a Fallos (Gossip) ---
-# Cuando un peer detecta que el servidor está caído:
-MSG_SYNC_PEERS_REQUEST = "SYNC_PEERS_REQUEST" # Peer A -> Peer B: ¿A quién conoces?
-MSG_SYNC_PEERS_RESPONSE = "SYNC_PEERS_RESPONSE" # Peer B -> Peer A: A esta gente
+# --- Mensajes de Gossip ---
+MSG_SYNC_PEERS_REQUEST = "SYNC_PEERS_REQUEST"
+MSG_SYNC_PEERS_RESPONSE = "SYNC_PEERS_RESPONSE"
+
+# --- ⭐ NUEVOS: Mensajes de RELAY ---
+MSG_RELAY_REQUEST = "RELAY_REQUEST"   # Peer → Server: "Reenvía esto al peer X"
+MSG_RELAY_MESSAGE = "RELAY_MESSAGE"   # Server → Peer: "Mensaje relayed de Y"
+MSG_CONNECTION_TEST = "CONNECTION_TEST"  # Peer → Peer: "¿Me puedes alcanzar?"
+MSG_CONNECTION_REPLY = "CONNECTION_REPLY"  # Peer → Peer: "Sí, te puedo alcanzar"
 
 # --- Funciones de Utilidad ---
 
@@ -35,7 +40,6 @@ def create_message(msg_type: str, sender_id: str = "system", content: any = None
         "to": to,
         "content": content,
     }
-    # Añadimos un terminador de nueva línea para delimitar mensajes en el stream
     return (json.dumps(message) + '\n').encode('utf-8')
 
 def parse_message(data: bytes) -> dict | None:
