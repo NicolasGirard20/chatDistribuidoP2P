@@ -35,20 +35,29 @@ if not st.session_state.logged_in:
     # Formulario de conexión
     with st.form("login_form"):
         username = st.text_input(
-            "Tu Nombre de Usuario", 
-            f"User_{random.randint(100, 999)}"
+            "Tu Nombre de Usuario",
+            placeholder=f"Ejemplo: User_{random.randint(100, 999)}",
+            key="username_input"
         )
-        port = st.number_input(
-            "Tu Puerto de Escucha", 
-            min_value=1024, 
-            max_value=49151, 
-            value=random.randint(10000, 11000)
-        )
+        
+        # El puerto se genera automáticamente (no se muestra al usuario)
+        # Generamos un puerto aleatorio cada vez que se carga la página
+        if 'temp_port' not in st.session_state:
+            st.session_state.temp_port = random.randint(10000, 11000)
+        
+        port = st.session_state.temp_port
+        
+        # Mostrar el puerto que se usará (solo informativo)
+        st.caption(f"🔌 Puerto asignado automáticamente: **{port}**")
+        
         submitted = st.form_submit_button("🚀 Conectar")
 
         if submitted:
-            if not username or not port or not st.session_state.server_ip:
-                st.error("❌ Por favor, completa todos los campos.")
+            # Eliminar espacios en blanco al inicio y final
+            username = username.strip()
+            
+            if not username or not st.session_state.server_ip:
+                st.error("❌ Por favor, ingresa tu nombre de usuario.")
             else:
                 with st.spinner("Iniciando y conectando al servidor..."):
                     try:
@@ -74,6 +83,8 @@ if not st.session_state.logged_in:
                             st.session_state.peer = peer
                             st.session_state.messages = []
                             st.session_state.logged_in = True
+                            # Limpiar el puerto temporal
+                            del st.session_state.temp_port
                             st.success(f"✅ ¡Conectado como {peer.username}!")
                             time.sleep(1)
                             st.rerun()
@@ -171,14 +182,14 @@ else:
     
     with chat_container:
         if not st.session_state.messages:
-            st.info("📭 No hay mensajes. ¡Escribe algo!")
+            st.info("🔭 No hay mensajes. ¡Escribe algo!")
         else:
             for i, message in enumerate(st.session_state.messages):
                 with st.chat_message(message["role"]):
                     st.markdown(message["content"])
 
     # --- INPUT DE MENSAJE ---
-    prompt = st.chat_input("✍️ Escribe un mensaje...")
+    prompt = st.chat_input("✏️ Escribe un mensaje...")
     
     if prompt:
         # Añadir a UI
